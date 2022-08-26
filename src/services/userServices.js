@@ -1,4 +1,4 @@
-// const { User } = require('../database/models');
+const { User } = require('../database/models');
 const validations = require('../helpers/validations');
 const { generateToken } = require('../helpers/createToken');
 
@@ -9,4 +9,12 @@ const userLogin = async (email, password) => {
   return userToken;
 };
 
-module.exports = { userLogin };
+const createUser = async (userObj) => {
+  const validateUser = await validations.validateNewUser(userObj);
+  if (validateUser !== true) return validateUser;
+  await User.create(userObj);
+  const userToken = generateToken(userObj.email);
+  return userToken;
+};
+
+module.exports = { userLogin, createUser };
