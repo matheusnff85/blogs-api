@@ -13,4 +13,14 @@ const createBlogPost = async (req, res) => {
   }
 };
 
-module.exports = { createBlogPost };
+const getAll = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const result = await postServices.getAll(id);
+    return res.status(result.code).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBlogPost, getAll };

@@ -18,6 +18,7 @@ app.post('/categories', validateToken, categoryController.createCategory);
 app.get('/categories', validateToken, categoryController.getAll);
 
 app.post('/post', validateToken, postController.createBlogPost);
+app.get('/post', validateToken, postController.getAll);
 
 // ...
 
