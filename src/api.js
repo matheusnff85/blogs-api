@@ -9,6 +9,7 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/post/search', validateToken, postController.getByQuery);
 app.post('/login', userController.userLogin);
 app.post('/user', userController.createUser);
 app.get('/user', validateToken, userController.getAllUsers);

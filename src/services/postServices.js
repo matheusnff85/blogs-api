@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const validations = require('../helpers/validations');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 const config = require('../database/config/config');
@@ -67,4 +68,23 @@ const deletePost = async (userId, postId) => {
   return true;
 };
 
-module.exports = { createBlogPost, getAll, getOne, updatePost, deletePost };
+const getByQuery = async (query) => {
+  if (!query || query === '') {
+    return BlogPost.findAll({
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } }],
+    }); 
+  }
+  const result = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{ title: query }, { content: query }],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } }],
+  });
+  return result;
+};
+
+module.exports = { createBlogPost, getAll, getOne, updatePost, deletePost, getByQuery };

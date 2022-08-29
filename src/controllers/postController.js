@@ -65,4 +65,14 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { createBlogPost, getAll, getOne, updatePost, deletePost };
+const getByQuery = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const result = await postServices.getByQuery(q);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBlogPost, getAll, getOne, updatePost, deletePost, getByQuery };
