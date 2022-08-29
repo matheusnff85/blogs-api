@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { User } = require('../database/models');
+const { User, Category } = require('../database/models');
 
 const userSchema = Joi.object({
   displayName: Joi.string().min(8).required().messages({
@@ -38,4 +38,10 @@ const validateNewUser = async (userObj) => {
   return true;
 };
 
-module.exports = { validateLogin, validateNewUser };
+const validateCategoryIds = async (categoryArray) => {
+  const { count } = await Category.findAndCountAll({ where: { id: categoryArray } });
+  if (count !== categoryArray.length) return { code: 400, message: '"categoryIds" not found' };
+  return true;
+};
+
+module.exports = { validateLogin, validateNewUser, validateCategoryIds };
