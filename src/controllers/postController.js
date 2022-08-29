@@ -36,4 +36,19 @@ const getOne = async (req, res) => {
   }
 };
 
-module.exports = { createBlogPost, getAll, getOne };
+const updatePost = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const { id: postId } = req.params;
+    const { title, content } = req.body;
+    const result = await postServices.updatePost(userId, postId, title, content);
+    if ('message' in result) {
+      return res.status(result.code).json({ message: result.message });
+    }
+    return res.status(result.code).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBlogPost, getAll, getOne, updatePost };

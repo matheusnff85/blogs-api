@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { User, Category } = require('../database/models');
+const { User, Category, BlogPost } = require('../database/models');
 
 const userSchema = Joi.object({
   displayName: Joi.string().min(8).required().messages({
@@ -44,4 +44,11 @@ const validateCategoryIds = async (categoryArray) => {
   return true;
 };
 
-module.exports = { validateLogin, validateNewUser, validateCategoryIds };
+const validatePostOwner = async (userId, postId) => {
+  const post = await BlogPost.findByPk(postId);
+  if (!post) return { code: 404, message: 'Post does not exist' };
+  if (post.userId !== userId) return { code: 401, message: 'Unauthorized user' };
+  return true;
+};
+
+module.exports = { validateLogin, validateNewUser, validateCategoryIds, validatePostOwner };

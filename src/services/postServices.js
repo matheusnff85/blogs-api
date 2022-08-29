@@ -45,4 +45,18 @@ const getOne = async (postId) => {
   return { code: 200, data: result };
 };
 
-module.exports = { createBlogPost, getAll, getOne };
+const updatePost = async (userId, postId, title, content) => {
+  if (!title || !content) return { code: 400, message: 'Some required fields are missing' };
+  const validateOwner = await validations.validatePostOwner(userId, postId);
+  if (validateOwner !== true) return validateOwner;
+
+  await BlogPost.update({ title, content }, { where: { id: postId } });
+  const updatedPost = await BlogPost.findByPk(postId, {
+    include: [{ model: Category, as: 'categories', through: { attributes: [] } },
+    { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    ],
+  });
+  return { code: 200, data: updatedPost };
+};
+
+module.exports = { createBlogPost, getAll, getOne, updatePost };
