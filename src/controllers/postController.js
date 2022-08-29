@@ -23,4 +23,17 @@ const getAll = async (req, res) => {
   }
 };
 
-module.exports = { createBlogPost, getAll };
+const getOne = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await postServices.getOne(id);
+    if ('message' in result) {
+      return res.status(result.code).json({ message: result.message });
+    }
+    return res.status(result.code).json(result.data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBlogPost, getAll, getOne };
