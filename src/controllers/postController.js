@@ -51,4 +51,18 @@ const updatePost = async (req, res) => {
   }
 };
 
-module.exports = { createBlogPost, getAll, getOne, updatePost };
+const deletePost = async (req, res) => {
+  try {
+    const { id: userId } = req.user;
+    const { id: postId } = req.params;
+    const result = await postServices.deletePost(userId, postId);
+    if (result !== true) {
+      return res.status(result.code).json({ message: result.message });
+    }
+    return res.status(204).end();
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBlogPost, getAll, getOne, updatePost, deletePost };

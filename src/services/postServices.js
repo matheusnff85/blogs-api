@@ -59,4 +59,12 @@ const updatePost = async (userId, postId, title, content) => {
   return { code: 200, data: updatedPost };
 };
 
-module.exports = { createBlogPost, getAll, getOne, updatePost };
+const deletePost = async (userId, postId) => {
+  const validateOwner = await validations.validatePostOwner(userId, postId);
+  if (validateOwner !== true) return validateOwner;
+
+  await BlogPost.destroy({ where: { id: postId } });
+  return true;
+};
+
+module.exports = { createBlogPost, getAll, getOne, updatePost, deletePost };
