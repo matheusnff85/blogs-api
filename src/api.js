@@ -13,6 +13,7 @@ app.post('/login', userController.userLogin);
 app.post('/user', userController.createUser);
 app.get('/user', validateToken, userController.getAllUsers);
 app.get('/user/:id', validateToken, userController.getOneUser);
+app.delete('/user/me', validateToken, userController.deleteUser);
 
 app.post('/categories', validateToken, categoryController.createCategory);
 app.get('/categories', validateToken, categoryController.getAll);
