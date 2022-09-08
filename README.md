@@ -39,17 +39,17 @@ Sinta-se livre para alterar o valor delas sem modificar o nome da chave.
 ## Scripts prontos
 
 - Deleta o banco de dados:
-```
+```json
 "drop": "npx sequelize-cli db:drop"
 ```
 
 - Cria o banco de dados e gera as tabelas:
-```
+```json
 "prestart": "npx sequelize-cli db:create && npx sequelize-cli db:migrate"
 ```
 
 - Insere dados/popula a tabela:
-```
+```json
 "seed": "npx sequelize-cli db:seed:all"
 ```
 
